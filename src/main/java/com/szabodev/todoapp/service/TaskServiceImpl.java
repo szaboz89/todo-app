@@ -4,6 +4,8 @@ import com.szabodev.todoapp.domain.Task;
 import com.szabodev.todoapp.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TaskServiceImpl implements TaskService {
 
@@ -21,5 +23,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task save(Task task) {
         return this.taskRepository.save(task);
+    }
+
+    @Override
+    public void delete(Task task) {
+        taskRepository.delete(task);
+    }
+
+    @Override
+    public Optional<Task> findOne(Long id) {
+        return Optional.ofNullable(taskRepository.findOne(id));
     }
 }

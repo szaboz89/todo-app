@@ -181,6 +181,9 @@ var TaskService = (function () {
     TaskService.prototype.addTask = function (task) {
         return this.http.post('/api/tasks/save', task).map(function (response) { return response.json(); });
     };
+    TaskService.prototype.deleteTask = function (task) {
+        return this.http.delete('/api/tasks/' + task.id).map(function (response) { return response; });
+    };
     TaskService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["w" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_http__["a" /* Http */]])
@@ -303,7 +306,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/tasks/tasks-list/tasks-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<ul class=\"list-group\">\n    <li *ngFor=\"let task of tasks\" class=\"list-group-item\">\n        <div class=\"task-checkbox\">\n            <input type=\"checkbox\"\n                   class=\"list-child\"\n                   (change)=\"onTaskChange($event,task)\"\n                   [checked]=\"task.completed\" title=\"task\">\n            <span ngClass=\"{{task.completed ? 'name completed' : 'name'}}\">{{ task.name }}</span>\n            <span class=\"label {{ getDueDateLabel(task) }} pull-right\"> {{ task.dueDate }}</span>\n        </div>\n    </li>\n\n</ul>\n"
+module.exports = "<ul class=\"list-group\">\n    <li *ngFor=\"let task of tasks\" class=\"list-group-item\">\n        <div class=\"task-checkbox\">\n            <input type=\"checkbox\"\n                   class=\"list-child\"\n                   (change)=\"onTaskChange($event,task)\"\n                   [checked]=\"task.completed\" title=\"task\">\n            <span ngClass=\"{{task.completed ? 'name completed' : 'name'}}\">{{ task.name }}</span>\n            <span class=\"label {{ getDueDateLabel(task) }}\"> {{ task.dueDate }}</span>\n            <span class=\"pull-right\">\n                <a class=\"btn btn-xs btn-danger\"\n                   (click)=\"deleteTask(task)\"\n                   onclick=\"return confirm('Are you sure you want to delete this item?');\">x</a>\n            </span>\n        </div>\n    </li>\n\n</ul>\n"
 
 /***/ }),
 
@@ -332,17 +335,25 @@ var TasksListComponent = (function () {
     }
     TasksListComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.initTasks();
+        this.taskService.onTaskAdded.subscribe(function (task) { return _this.tasks.push(task); });
+    };
+    TasksListComponent.prototype.initTasks = function () {
+        var _this = this;
         this.taskService.getTasks()
             .subscribe(function (tasks) {
             _this.tasks = tasks;
         }, function (error) { return console.log(error); });
-        this.taskService.onTaskAdded.subscribe(function (task) { return _this.tasks.push(task); });
     };
     TasksListComponent.prototype.getDueDateLabel = function (task) {
         return task.completed ? 'label-success' : 'label-primary';
     };
     TasksListComponent.prototype.onTaskChange = function (event, task) {
         this.taskService.saveTask(task, event.target.checked).subscribe();
+    };
+    TasksListComponent.prototype.deleteTask = function (task) {
+        var _this = this;
+        this.taskService.deleteTask(task).subscribe(function (response) { return _this.initTasks(); }, function (error) { return console.log(error); });
     };
     TasksListComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({

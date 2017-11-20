@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Task} from "app/tasks/task.model";
+import {Task} from "../task.model";
 import {TaskService} from "../task.service";
 
 @Component({
@@ -15,6 +15,14 @@ export class TasksListComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.initTasks();
+
+        this.taskService.onTaskAdded.subscribe(
+            (task: Task) => this.tasks.push(task)
+        );
+    }
+
+    initTasks() {
         this.taskService.getTasks()
             .subscribe(
                 (tasks: any[]) => {
@@ -22,10 +30,6 @@ export class TasksListComponent implements OnInit {
                 },
                 (error) => console.log(error)
             );
-
-        this.taskService.onTaskAdded.subscribe(
-            (task: Task) => this.tasks.push(task)
-        );
     }
 
     getDueDateLabel(task: Task) {
@@ -34,5 +38,12 @@ export class TasksListComponent implements OnInit {
 
     onTaskChange(event, task) {
         this.taskService.saveTask(task, event.target.checked).subscribe();
+    }
+
+    deleteTask(task) {
+        this.taskService.deleteTask(task).subscribe(
+            response => this.initTasks(),
+            (error) => console.log(error)
+        );
     }
 }

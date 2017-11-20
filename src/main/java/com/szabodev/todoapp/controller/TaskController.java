@@ -4,6 +4,8 @@ import com.szabodev.todoapp.domain.Task;
 import com.szabodev.todoapp.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
@@ -22,5 +24,11 @@ public class TaskController {
     @PostMapping("/save")
     public Task saveTask(@RequestBody Task task) {
         return this.taskService.save(task);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        Optional<Task> task = taskService.findOne(id);
+        task.ifPresent(taskService::delete);
     }
 }

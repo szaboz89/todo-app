@@ -1,7 +1,7 @@
 import {Http} from "@angular/http";
 import {EventEmitter, Injectable} from "@angular/core";
 import "rxjs/add/operator/map";
-import {Task} from "app/tasks/task.model";
+import {Task} from "./task.model";
 
 @Injectable()
 export class TaskService {
@@ -23,6 +23,10 @@ export class TaskService {
 
     addTask(task: Task) {
         return this.http.post('/api/tasks/save', task).map(response => response.json());
+    }
+
+    deleteTask(task: Task) {
+        return this.http.delete('/api/tasks/' + task.id).map(response => response);
     }
 
 }
