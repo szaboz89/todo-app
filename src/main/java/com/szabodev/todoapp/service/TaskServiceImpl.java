@@ -32,6 +32,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Optional<Task> findOne(Long id) {
-        return Optional.ofNullable(taskRepository.findOne(id));
+        return taskRepository.findById(id);
     }
 }

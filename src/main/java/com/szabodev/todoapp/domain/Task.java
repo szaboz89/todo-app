@@ -1,7 +1,5 @@
 package com.szabodev.todoapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +12,6 @@ public class Task {
     @GeneratedValue
     private Long id;
     private String name;
-    @JsonFormat(pattern = "MM/dd/yyyy")
     private LocalDate dueDate;
     private Boolean completed;
 
