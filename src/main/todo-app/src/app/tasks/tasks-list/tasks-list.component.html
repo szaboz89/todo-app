@@ -1,0 +1,19 @@
+<!--suppress HtmlFormInputWithoutLabel -->
+<ul class="list-group">
+  <li *ngFor="let task of tasks" class="list-group-item">
+    <div class="task-checkbox">
+      <input type="checkbox"
+             class="list-child"
+             (change)="onTaskChange($event,task)"
+             [checked]="task.completed" title="task">
+      <span [ngClass]="task.completed ? 'name completed' : 'name'">{{ task.name }}</span>
+      <span class="label {{ getDueDateLabel(task) }}"> {{ task.dueDate }}</span>
+      <span class="pull-right">
+                <a class="btn btn-xs btn-danger"
+                   (click)="deleteTask(task)"
+                   onclick="return confirm('Are you sure you want to delete this item?');">x</a>
+            </span>
+    </div>
+  </li>
+
+</ul>
